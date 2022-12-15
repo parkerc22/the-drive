@@ -8,7 +8,7 @@
  * It loads all of the meshes and collision bodies.
  */
 
-import { WebGLRenderer, PerspectiveCamera, Vector3, SphereGeometry, MeshNormalMaterial, Points, OrthographicCamera, ShaderMaterial, PointsMaterial, AdditiveBlending, Mesh, BoxGeometry, TextureLoader, sRGBEncoding, PlaneGeometry, MeshLambertMaterial, Group, Scene, BufferGeometry, MeshBasicMaterial, Color, ConvexGeometry, DoubleSide, FogExp2, MeshToonMaterial } from 'three';
+import { WebGLRenderer, PointLight, PerspectiveCamera, Vector3, SphereGeometry, MeshNormalMaterial, Points, OrthographicCamera, ShaderMaterial, PointsMaterial, AdditiveBlending, Mesh, BoxGeometry, TextureLoader, sRGBEncoding, PlaneGeometry, MeshLambertMaterial, Group, Scene, BufferGeometry, MeshBasicMaterial, Color, ConvexGeometry, DoubleSide, FogExp2, MeshToonMaterial } from 'three';
 
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
@@ -87,7 +87,8 @@ const menuCamera = new OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 
 // the menu is just a scene
 //const menu = new Menu(window.innerWidth, window.innerHeight, camera.quaternion);
-const menu = new Menu(2, 2, menuCamera.quaternion);
+const menu = new Menu(2, 2, false);
+const gameOver = new Menu(2, 2, true);
 camera.zoom = 0.4;
 camera.updateProjectionMatrix();
 // game over scene
@@ -186,7 +187,7 @@ const world = new World(
 )
 
 
-const player = new PlayerVehicle(world, [3.1,16, 90]);
+const player = new PlayerVehicle(world, [3.1,16, 100]);
 
 /*
 const boxBody = new Body({
@@ -219,6 +220,10 @@ const sphere_geo = new SphereGeometry(wheelBodies[0].shapes[0].radius);
 
 const threeArray = new Array(); 
 const cannonArray = new Array(); 
+
+const anotherLight = new PointLight(0xFFFFFF, 1.2)
+anotherLight.position.add(new Vector3(3.1,16, 100))
+scene.add(anotherLight)
 
 threeArray.push(boxMesh);
 cannonArray.push(boxBody);
@@ -293,6 +298,34 @@ function loadBodies(roadModelsToLoad){
     }
 }
 
+// add end-of-game trigger 
+const gameEndBody = new Body({
+    isTrigger: true,
+    shape: new Box(new Vec3(4, 4, 4)),
+    position: new Vec3(27, 45, -9),
+    type: Body.STATIC
+})
+
+// bottom of world handling
+const killBody = new Body({
+    isTrigger: true,
+    shape: new Box(new Vec3(100, 4, 100)),
+    position: new Vec3(0, -10, 0),
+    type: Body.STATIC
+})
+world.addBody(killBody)
+killBody.addEventListener("collide", endGame)
+gameEndBody.addEventListener("collide", endGame)
+
+function endGame(){
+    console.log("Game Over!")
+    world.removeBody(boxBody)
+    sceneR = gameOver;
+    debugger;
+}
+
+world.addBody(gameEndBody)
+
 
 
 // world.addBody(roads[1].body)
@@ -334,9 +367,10 @@ const onAnimationFrameHandler = (timeStamp) => {
     overheadCamera.lookAt(new Vector3(boxBody.position.x, boxBody.position.y+10, boxBody.position.z));
 
     // GAME OVER!
-    if (boxMesh.position.y <= particleSystem.geometry.attributes.position.array[1] + 5 && gamestart) {
+    if (boxMesh.position.y <= particleSystem.geometry.attributes.position.array[1] + 2 && gamestart) {
         renderer.render( gameover, camera );
         console.log('gameover');
+        world.removeBody(boxBody);
         gamestart = false;
     }
 
