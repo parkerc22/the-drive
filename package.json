@@ -1,6 +1,6 @@
 {
   "name": "the-drive",
-  "repository": "parkerc22.github.io",
+  "repository": "https://github.com/parkerc22/parkerc22.github.io",
   "version": "0.8.0",
   "title": "The Drive",
   "description": "A spooky first-person drive up a mountain as fog chases you.",
