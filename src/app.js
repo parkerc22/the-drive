@@ -74,6 +74,9 @@ camera.lookAt(new Vector3(0, 0, 0));
 const overheadCamera = new OrthographicCamera();
 overheadCamera.position.set(0, 10, 100);
 overheadCamera.lookAt(new Vector3(0, 0, 0));
+
+// https://stackoverflow.com/questions/20314486/how-to-perform-zoom-with-a-orthographic-projection
+// https://stackoverflow.com/questions/67334095/flip-camera-upside-down-three-js 
 overheadCamera.zoom = 0.2;
 overheadCamera.updateProjectionMatrix();
 overheadCamera.up.set(0, -1, 0);

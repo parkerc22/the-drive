@@ -12,6 +12,7 @@ class MakeAudio{
         this.bg = new Audio( listener );
 
         // load a sound and set it as the Audio object's buffer
+        // https://threejs.org/docs/?q=audio#api/en/audio/Audio
         const audioLoader = new AudioLoader();
         const g = this.bg;
         audioLoader.load(bgMusic , function( buffer ) {

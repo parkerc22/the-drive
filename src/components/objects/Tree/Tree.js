@@ -2,6 +2,7 @@ import {Group, Color, MeshToonMaterial, TextureLoader, Vector3} from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import TreeMODEL from './tree.gltf';
 import LowResTreeMODEL from './tree_low_poly.gltf';
+// pine image at https://www.pexels.com/photo/close-up-photo-of-green-pine-tree-leaves-4515743/ 
 const pineURL = require("./pine.png").default;
 const texture = new TextureLoader().load(pineURL);
 const texMaterial = new MeshToonMaterial({map: texture});
@@ -16,6 +17,10 @@ class Tree extends Group {
         this.name = "tree";
 
         // Load object
+        // custom loader functions adapted from 
+        //https://sbcode.net/threejs/loaders-gltf/
+        // and
+        //https://discourse.threejs.org/t/gltf-accessing-meshes-from-an-imported-scene/1845/2
         const loader = new GLTFLoader();
         const temp = this;
         function loadTree (gltf) {
