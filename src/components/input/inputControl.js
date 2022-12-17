@@ -232,9 +232,6 @@ class InputControl {
                         this.audio.bg.play();
                     }
                     break;
-                case 'l':
-                    this.audio.beep.play();
-                    break;
                 default:
                     return;
             }

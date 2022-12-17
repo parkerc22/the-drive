@@ -2,7 +2,7 @@ import {AudioListener, Audio, AudioLoader} from 'three'
 
 class MakeAudio{
     constructor(camera){
-        const beepSound = require("./censor.mp3").default;
+        // sound citation in the writeup
         const bgMusic =  require("./guitarBGM.mp3").default;;
 
         const listener = new AudioListener();
@@ -20,16 +20,6 @@ class MakeAudio{
             g.setLoop( true );
             g.setVolume(0.5);
             g.setPlaybackRate (1); 
-        });
-
-        this.beep = new Audio(listener);
-
-        const be = this.beep;
-        const beepLoader = new AudioLoader();
-        beepLoader.load(beepSound, function(buffer) {
-            be.setBuffer(buffer);
-            be.setLoop(false);
-           be.setVolume(0.1);
         });
 
 
